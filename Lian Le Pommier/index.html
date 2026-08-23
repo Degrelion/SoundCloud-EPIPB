@@ -1,0 +1,2490 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Streamez Lian | Écoutez des albums musicaux en ligne gratuitement sur SoundCloud</title>
+    <link rel="shortcut icon" href="./Assets/logo.png" type="image/s-icon">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+/* Texte global clair */
+body, h1, h2, h3, h4, h5, h6, p, span, a, div {
+  color: #e6e6e6 !important;
+}
+    body {
+      background: #1D1A2E;
+      color: #f2f2f2;
+    }
+
+    /* TOP BAR */
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 8px 16px;
+      background: #1D1A2E;
+      border-bottom: 1px solid #d1d1d1;
+    }
+
+    .topbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 18px;
+      color: #ff5500;
+      cursor: pointer;
+    }
+
+    .topbar-logo-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 3px;
+      background: linear-gradient(135deg, #ff5500, #ffb300);
+    }
+
+    .topbar-search {
+      flex: 1;
+    }
+
+    .topbar-search input {
+      width: 100%;
+      padding: 6px 10px;
+      border-radius: 2px;
+      border: 1px solid #ccc;
+      font-size: 13px;
+      background: #fff;
+    }
+
+    .topbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .topbar-nav a {
+      text-decoration: none;
+      color: #333;
+    }
+
+    .topbar-btn {
+      border: 1px solid #ccc;
+      background: #fff;
+      padding: 5px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .topbar-btn.orange {
+      background: #ff5500;
+      border-color: #ff5500;
+      color: #fff;
+    }
+
+    /* PAGE WRAPPER */
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: #fff;
+      min-height: calc(100vh - 48px);
+background: #111;
+box-shadow: 0 0 0 1px #222;
+    }
+
+    /* HEADER PROFIL (BANNIÈRE + AVATAR) */
+
+    .profile-header {
+      position: relative;
+      background: linear-gradient(90deg, #3b3b3b, #111);
+      color: #fff;
+      padding-bottom: 16px;
+    }
+
+.profile-banner {
+  width: 100%;
+  height: 180px;
+  background-image: url("assets/banner.png");
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+}
+
+    .profile-main {
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+      padding: 0 24px 12px;
+      margin-top: -60px;
+    }
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 4px; /* carré arrondi */
+  background-image: url("assets/icon.png"); /* ← ton image */
+  background-size: cover;
+  background-position: center;
+  border: 3px solid #fff;
+  flex-shrink: 0;
+  margin-top: -60px; /* remonte l’avatar sur la bannière */
+}
+
+    .profile-info {
+      flex: 1;
+    }
+
+    .profile-name {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .profile-meta {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-bottom: 8px;
+    }
+
+    .profile-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      position: relative;
+}
+    .btn-follow {
+      padding: 6px 14px;
+      font-size: 12px;
+      border-radius: 2px;
+      border: none;
+      background: #ff5500;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .btn-more {
+      padding: 5px 10px;
+      font-size: 12px;
+      border-radius: 2px;
+      border: 1px solid rgba(255,255,255,0.4);
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    /* NAV SECONDAIRE (TRACKS / ALBUMS / PLAYLISTS / ETC.) */
+
+    .profile-tabs {
+      display: flex;
+      gap: 16px;
+      padding: 0 24px 10px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin-top: 10px;
+      font-size: 13px;
+    }
+.tab-content {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.tab-content.active {
+  display: block;
+  opacity: 1;
+}
+
+.profile-tab {
+  background: none;
+  border: none;
+  color: #aaa;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.profile-tab.active {
+  color: #fff;
+  border-bottom: 2px solid #ff5500;
+}
+
+    /* CONTENU PRINCIPAL (CENTRE + DROITE) */
+
+    .content {
+      padding: 20px 24px 40px;
+      background: #1D1A2E;
+    }
+
+    /* grille centre + droite */
+    .content-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 260px; /* centre / droite */
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .content-main {
+      background: #111;
+      border: 1px solid #333;
+      padding: 16px 16px 20px;
+    }
+
+    .content-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .content-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .content-sort {
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* GRILLE D’ALBUMS */
+
+    .albums-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .album-card {
+      background: #0A0910;
+      border-radius: 2px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 0 0 1px #333;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .album-cover {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: linear-gradient(135deg, #ff5500, #ffb300);
+    }
+.album-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+    .album-body {
+      padding: 8px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .album-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #111;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .album-artist {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .album-meta {
+      font-size: 11px;
+      color: #999;
+      margin-top: 2px;
+    }
+
+    /* COLONNE DROITE (MENU À DROITE) */
+
+    .rightbar {
+      background: #0A0910;
+      border: 1px solid #333;
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      font-size: 13px;
+    }
+
+    .right-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+.right-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.right-section-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.see-all {
+  font-size: 10px;
+  font-weight: 300;
+  color: #aaa;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.see-all:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+    .user-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .user-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .user-pic {
+      width: 32px;
+      height: 32px;
+      background: #ccc;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .user-name {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .user-meta {
+      font-size: 11px;
+      color: #777;
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .links a {
+      font-size: 12px;
+      color: #555;
+      text-decoration: none;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+
+    /* PETIT FOOTER */
+
+    .footer {
+      padding: 12px 24px 18px;
+      font-size: 11px;
+      color: #777;
+      border-top: 1px solid #e5e5e5;
+      background: #fafafa;
+    }
+
+<!-- AJOUT DANS LA PARTIE CSS (dans <style>) -->
+.rightbar {
+  background:#111;
+  border:1px solid #333;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+  font-size:13px;
+}
+
+.right-section-title {
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.stats-row {
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  margin-bottom:6px;
+}
+
+.stats-values {
+  display:flex;
+  justify-content:space-between;
+  font-weight:600;
+  font-size:14px;
+  margin-bottom:12px;
+}
+
+.about-text {
+  font-size:12px;
+  color:#555;
+  line-height:1.4;
+}
+
+.links {
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.links a {
+  font-size:12px;
+  color:#555;
+  text-decoration:none;
+}
+
+.list-block {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.item {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+a.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.item-pic {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  background-size: cover;
+  background-position: center;
+  background-color: #222;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Overlay play */
+.item-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  color: white;
+  pointer-events: none;
+}
+
+/* Affiche ▶️ au hover */
+.item:hover .item-overlay {
+  opacity: 1;
+}
+
+
+
+.item-title {
+  font-size:13px;
+  font-weight:600;
+}
+
+.footer-links {
+  font-size:11px;
+  color:#777;
+  line-height:1.4;
+}
+.item-stats {
+  display:flex;
+  gap:12px;
+  font-size:10px;
+  color:#777;
+  margin-left:10px; /* pour aligner sous le titre */
+}
+
+.item-stats span {
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.album-tracks {
+  display: none;
+  background: #111;
+  border: 1px solid #333;
+  padding: 12px;
+  margin-top: 6px;
+  border-radius: 4px;
+  grid-column: 1 / -1; /* le dépliant prend toute la largeur de la grille */
+}
+
+/* --- TITRES DES TRACKS --- */
+.track {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #222;
+  cursor: pointer;
+}
+.track-thumb-wrapper {
+  position: relative;
+  width: 48px;
+  height: 48px;
+}
+
+.track-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Icône Play */
+.track-thumb-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.45);
+  color: white;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  border-radius: 4px;
+  transition: opacity 0.2s ease;
+  pointer-events: none; /* important : ne bloque pas le clic */
+}
+
+/* Apparition au survol */
+.track:hover .track-thumb-overlay {
+  opacity: 1;
+}
+
+.track-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.track-title {
+  color: #e6e6e6;
+  font-weight: 600;
+}
+
+.track-actions {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  color: #aaa;
+}
+/* ========================= */
+/*        LECTEUR GLOBAL     */
+/* ========================= */
+
+.global-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #111;
+  border-top: 1px solid #333;
+  padding: 10px 16px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 999999;
+}
+
+/* Ligne principale */
+.global-player-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* ========================= */
+/*        COLONNE GAUCHE     */
+/* ========================= */
+
+.global-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.global-player-thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* ========================= */
+/*        COLONNE CENTRE     */
+/* ========================= */
+
+.global-center {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Boutons du centre */
+.global-center button {
+  background: transparent;
+  border: none;
+  padding: 6px;
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+}
+
+/* Hover Spotify */
+.global-center button:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* ========================= */
+/*        COLONNE DROITE     */
+/* ========================= */
+
+.global-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Boutons à droite */
+.global-right button {
+  background: transparent;
+  border: none;
+  padding: 6px;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+}
+
+/* Hover Spotify */
+.global-right button:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* Slider volume */
+#volumeSlider {
+  width: 80px;
+  cursor: pointer;
+}
+
+/* ========================= */
+/*     BARRE DE PROGRESSION  */
+/* ========================= */
+.spotify-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.time-left,
+.time-right {
+  font-size: 13px;
+  color: #ccc;
+  width: 40px; /* largeur fixe = alignement parfait */
+  text-align: center;
+}
+.global-progress {
+  flex: 1; /* la barre prend tout l’espace */
+  height: 6px;
+  background: #444;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+}
+
+.global-progress-fill {
+  height: 100%;
+  background: #ff5500;
+  border-radius: 3px;
+  width: 0%;
+}
+/* Audio global invisible */
+#globalAudio {
+  display: none;
+}
+
+/* Bouton Play All */
+.play-all {
+  background: #ff5500;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  font-size: 13px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+.album-card {
+  cursor: pointer;
+}
+.track-audio {
+  width: 100%;
+  margin-top: 6px;
+}
+/* Fenêtre Lyrics */
+.lyrics-panel {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 320px;
+  height: 260px; /* important : une hauteur de base */
+  background: #111;
+  color: white;
+  border-radius: 12px;
+  padding: 12px;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+  overflow: auto;
+  z-index: 9999;
+}
+
+
+/* Grip visuel en haut à gauche */
+.lyrics-panel::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(315deg, transparent 50%, #555 50%);
+  pointer-events: none;
+}
+/* Grip interactif en haut à gauche */
+.lyrics-resize-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  cursor: nwse-resize;
+  z-index: 10000;
+}
+
+.lyrics-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.lyrics-header button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.lyrics-content {
+  overflow-y: auto;
+  max-height: calc(50vh - 40px);
+  white-space: pre-line;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.global-timer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin: 6px 0 4px 0;
+  color: #ccc;
+  font-weight: 500;
+  opacity: 0.9;
+}
+#tab-tracks .track {
+  margin: 8px 0;
+  padding: 8px;
+  border-radius: 6px;
+  background: #111;
+  cursor: pointer;
+}
+
+#tab-tracks .track:hover {
+  background: #1a1a1a;
+}
+.tracks-sort {
+  margin-bottom: 12px;
+}
+.tracks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.tracks-title {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.tracks-sort select {
+  background: #111;
+  color: #fff;
+  border: 1px solid #333;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+#tracksSortSelect {
+  background: #111;
+  color: #fff;
+  border: 1px solid #333;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+/* Notification au-dessus du bouton Partager */
+.share-notif {
+  position: absolute;
+  top: -35px; /* au-dessus du bouton */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff5500;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 999;
+}
+.artist-card {
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+}
+
+.share-notif.show {
+  opacity: 1;
+}
+.section-block { margin-bottom: 40px; }
+.section-title { font-size: 22px; font-weight: 600; margin-bottom: 14px; }
+
+/* TITRES POPULAIRES */
+.popular-tracks { display: flex; flex-direction: column; gap: 14px; }
+.popular-track { display: flex; align-items: center; gap: 14px; cursor: pointer; padding: 10px; border-radius: 8px; transition: background 0.2s; }
+.popular-track:hover { background: rgba(255,255,255,0.05); }
+.popular-cover { width: 60px; height: 60px; border-radius: 6px; object-fit: cover; }
+.popular-title { font-size: 16px; font-weight: 500; }
+.popular-stats { font-size: 13px; opacity: 0.7; }
+
+/* ALBUMS */
+.album-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.album-card { cursor: pointer; text-align: center; }
+.album-cover { width: 100%; border-radius: 8px; margin-bottom: 6px; }
+.album-name { font-size: 15px; font-weight: 500; }
+.album-meta { font-size: 12px; opacity: 0.7; }
+
+/* ARTISTES */
+.artist-grid { display: flex; gap: 20px; }
+.artist-card { text-align: center; cursor: pointer; }
+.artist-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; }
+.artist-name { margin-top: 6px; font-size: 14px; }
+.about-artist {
+  font-size: 12px;
+  line-height: 1.4;
+  opacity: 0.85;
+  max-width: 700px;
+}
+
+/* MERCH */
+.merch-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.merch-card { text-align: center; cursor: pointer; }
+.merch-img { width: 60%; border-radius: 8px; }
+.merch-name { margin-top: 6px; }
+
+#volumeIcon {
+  background: transparent;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  padding: 6px;
+  line-height: 1;
+}
+
+/* Cœur vide (état normal) */
+#favBtn {
+  color: #bbbbbb;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* Cœur plein (état actif) */
+#favBtn.fav-active {
+  color: #ff4444; /* rouge visible */
+  transform: scale(1.25); /* effet pop */
+}
+
+/* Petit rebond quand on clique */
+#favBtn.fav-pop {
+  animation: favPop 0.25s ease;
+}
+
+@keyframes favPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35); }
+  100% { transform: scale(1.15); }
+}
+
+let isFavorite = false;
+
+function toggleFavorite() {
+  const favBtn = document.getElementById("favBtn");
+  isFavorite = !isFavorite;
+  favBtn.textContent = isFavorite ? "❤️" : "♡";
+}
+function addToPlaylist() {
+  const title = document.getElementById("globalPlayerTitle").textContent;
+  alert(`Ajouté à la playlist : ${title}`);
+}
+const volumeSlider = document.getElementById("volumeSlider");
+const globalAudio = document.getElementById("globalAudio");
+
+volumeSlider.addEventListener("input", () => {
+  globalAudio.volume = volumeSlider.value;
+});
+function toggleAlbum(id) {
+  const box = document.getElementById(id);
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+function playAll(id) {
+  const tracks = document.querySelectorAll(`#${id} audio`);
+  let index = 0;
+
+  function playNext() {
+    if (index < tracks.length) {
+      tracks[index].currentTime = 0;
+      tracks[index].play();
+      tracks[index].onended = playNext;
+      index++;
+    }
+  }
+
+  playNext();
+}
+function toggleAlbum(id) {
+  const box = document.getElementById(id);
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
+function toggleAlbum(id) {
+  const box = document.getElementById(id);
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+// LECTEUR GLOBAL
+function playInGlobalPlayer(title, src) {
+  const bar = document.getElementById("globalPlayer");
+  const audio = document.getElementById("globalAudio");
+  const titleBox = document.getElementById("globalPlayerTitle");
+
+  titleBox.textContent = title;
+  audio.src = src;
+  audio.load();      // ← OBLIGATOIRE
+  audio.play();      // ← OBLIGATOIRE
+
+  bar.style.display = "flex";
+}
+
+
+// LECTURE DE TOUT L’ALBUM
+function playAll(id) {
+  const tracks = document.querySelectorAll(`#${id} audio`);
+  let index = 0;
+
+  function playNext() {
+    if (index < tracks.length) {
+      const src = tracks[index].querySelector("source").src;
+      const title = tracks[index].previousElementSibling.querySelector(".track-title").textContent;
+
+      playInGlobalPlayer(title, src);
+
+      const globalAudio = document.getElementById("globalAudio");
+      globalAudio.onended = playNext;
+
+      index++;
+    }
+  }
+
+  playNext();
+}
+function playInGlobalPlayer(title, src) {
+  const bar = document.getElementById("globalPlayer");
+  const audio = document.getElementById("globalAudio");
+  const titleBox = document.getElementById("globalPlayerTitle");
+
+  titleBox.textContent = title;
+  audio.src = src;
+  audio.load();
+  audio.play();
+
+  bar.style.display = "flex";
+}
+
+
+const globalAudio = document.getElementById("globalAudio");
+const progressFill = document.getElementById("globalProgressFill");
+
+globalAudio.ontimeupdate = () => {
+  const percent = (globalAudio.currentTime / globalAudio.duration) * 100;
+  progressFill.style.width = percent + "%";
+};
+function seekGlobalAudio(event) {
+  const bar = event.currentTarget;
+  const rect = bar.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const percent = x / rect.width;
+  globalAudio.currentTime = percent * globalAudio.duration;
+}
+function redirectToGlobalPlayer(localAudio, title, src) {
+  // Stop le lecteur du dépliant
+  localAudio.pause();
+  localAudio.currentTime = 0;
+
+  // Lance le lecteur global
+  playInGlobalPlayer(title, src);
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-logo">
+      <div class="topbar-logo-icon"></div>
+      <span>SoundCloud</span>
+    </div>
+
+    <div class="topbar-search">
+      <input type="text" placeholder="Rechercher des artistes, groupes, morceaux, podcasts">
+    </div>
+
+    <nav class="topbar-nav">
+      <a href="#">Accueil</a>
+      <a href="#">Flux</a>
+      <a href="#">Bibliothèque</a>
+      <button class="topbar-btn orange">Téléverser</button>
+      <button class="topbar-btn">Se connecter</button>
+      <button class="topbar-btn">Créer un compte</button>
+    </nav>
+  </header>
+
+  <!-- PAGE CONTENANT LE PROFIL + ALBUMS -->
+  <div class="page">
+
+    <!-- HEADER PROFIL -->
+    <section class="profile-header">
+      <div class="profile-banner"></div>
+
+      <div class="profile-main">
+        <div class="profile-avatar"></div>
+
+        <div class="profile-info">
+          <div class="profile-name">Lian</div>
+          <div class="profile-meta">
+            Lian Degrai · France · Membre depuis 2019
+          </div>
+
+          <div class="profile-actions">
+            <button class="btn-follow">Suivre</button>
+            <button class="btn-more">Station</button>
+            <button class="btn-more" id="shareBtn">Partager</button>
+            <div id="shareNotif" class="share-notif">Lien copié !</div>
+            <button class="btn-more">Bloquer</button>
+            <button class="btn-more">Plus...</button>
+          </div>
+        </div>
+      </div>
+
+<nav class="profile-tabs">
+  <button class="profile-tab active" data-tab="all">Tout</button>
+  <button class="profile-tab" data-tab="tracks">Titres</button>
+  <button class="profile-tab" data-tab="albums">Albums</button>
+</nav>
+
+    </section>
+
+<main class="content">
+  <div class="content-layout">
+
+
+    <!-- CENTRE : ZONE DES ONGLET -->
+    <section class="content-main">
+
+
+<!-- CONTENU : TOUT -->
+
+<div class="tab-content active" id="tab-all">
+<div class="section-block">
+  <div class="section-title">Titres populaires</div>
+
+  <div class="popular-tracks">
+
+    <!-- Titre 1 -->
+<div class="popular-track"
+     onclick="playSingleTrack(document.querySelector('.track[data-title=&quot;Beurre Doré (VIP)&quot;]'))">
+
+  <img src="assets/music/img2.png" class="popular-cover">
+  <div class="popular-info">
+    <div class="popular-title">Beurre Doré (VIP)</div>
+    <div class="popular-stats">1.84M écoutes</div>
+  </div>
+</div>
+
+
+    <!-- Titre 2 -->
+<div class="popular-track"
+     onclick="playSingleTrack(document.querySelector('.track[data-title=&quot;Ne comptez jamais sur ce Beurre (Remix)&quot;]'))">
+
+  <img src="assets/music/img3.png" class="popular-cover">
+  <div class="popular-info">
+    <div class="popular-title">Ne comptez jamais sur ce Beurre (Remix)</div>
+    <div class="popular-stats">910k écoutes</div>
+  </div>
+</div>
+
+
+    <!-- Titre 3 -->
+<div class="popular-track"
+     onclick="playSingleTrack(document.querySelector('.track[data-title=&quot;Petit Beurre sur ma langue V3&quot;]'))">
+
+  <img src="assets/music/img1.png" class="popular-cover">
+  <div class="popular-info">
+    <div class="popular-title">Petit Beurre sur ma langue V3</div>
+    <div class="popular-stats">620k écoutes</div>
+  </div>
+</div>
+
+
+
+    <!-- Ajoute tes autres titres ici -->
+
+  </div>
+</div>
+
+
+
+<div class="section-block">
+  <div class="section-title">Artistes ayant joué avec</div>
+
+  <div class="artist-grid">
+
+    <a class="artist-card" href="../Degrelion/index.html">
+      <img src="assets/img/Degrelion.png" class="artist-avatar">
+      <div class="artist-name">Degrelion</div>
+    </a>
+    </div>
+
+
+
+</div>
+</div>
+
+
+
+<!-- CONTENU : TITRES POPULAIRES -->
+
+<div class="tab-content" id="tab-popular">
+  <!-- Ici tu mets tes titres populaires -->
+</div>
+
+
+
+<!-- CONTENU : TITRES -->
+
+<div class="tab-content" id="tab-tracks">
+
+  <div class="tracks-header">
+    <div class="tracks-title">Titres</div>
+
+    <div class="tracks-sort">
+      <select id="tracksSortSelect">
+        <option value="az">A → Z</option>
+        <option value="za">Z → A</option>
+        <option value="plays">Plus écoutés</option>
+        <option value="recent">Plus récents</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="tracksList"></div>
+
+</div>
+
+
+
+
+<!-- CONTENU : ALBUMS -->
+
+<div class="tab-content" id="tab-albums">
+
+  <div class="content-header">
+    <div class="content-title">Albums</div>
+  </div>
+
+  <section class="albums-grid">
+
+
+<!-- =================================== -->
+<!--   ALBUM : Sans Album   -->
+<!-- =================================== -->
+
+<article class="album-card" onclick="toggleAlbum('album1')">
+  <div class="album-cover">
+    <img src="assets/icon.png" alt="Sans Album">
+</div>
+  <div class="album-body">
+    <div class="album-title">Sans Album</div>
+    <div class="album-artist">Lian</div>
+    <div class="album-meta">Album · 2026 · 3 Titres</div>
+  </div>
+</article>
+
+<!-- DÉPLIANT SOUS L’ALBUM -->
+<div class="album-tracks" id="album1">
+
+  <div class="album-title">Code Route (Y2K Ver.)</div>
+
+  <!-- BOUTON LIRE TOUT -->
+  <button class="play-all" onclick="event.stopPropagation(); playAll('album3')">
+    Lire tout l’album
+  </button>
+
+<!-- TITRE 1 -->
+<div class="track"
+     data-title="Petit Beurre sur ma langue V3"
+     data-release="1"
+     data-src="assets/music/mus1.mp3"
+     data-cover="assets/music/img1.png"
+
+     data-album="album1"
+     data-album-title="Sans Album"
+
+     onclick="playSingleTrack(this)">
+     
+  <div class="track-thumb-wrapper">
+    <img class="track-thumb" src="assets/music/img1.png" alt="cover">
+    <div class="track-thumb-overlay">▶️</div>
+  </div>
+
+  <div class="track-info">
+    <span class="track-title">Petit Beurre sur ma langue V3</span>
+    <span class="track-actions">🔊 12k · ❤️ 540 · 🔁 1.1k · 💬 457</span>
+  </div>
+</div>
+
+
+
+  <!-- TITRE 2 -->
+<div class="track"
+     data-title="Beurre Doré (VIP)"
+     data-release="2"
+     data-src="assets/music/mus2.mp3"
+     data-cover="assets/music/img2.png"
+     data-album="album1"
+     data-album-title="Sans Album"
+     onclick="playSingleTrack(this)">
+  <div class="track-thumb-wrapper">
+    <img class="track-thumb" src="assets/music/img2.png" alt="cover">
+    <div class="track-thumb-overlay">▶️</div>
+  </div>
+  <div class="track-info">
+    <span class="track-title">Beurre Doré (VIP)</span>
+    <span class="track-actions">🔊 1.8M · ❤️ 120k · 🔁 35k · 💬 190</span>
+  </div>
+</div>
+
+
+  <!-- TITRE 3 -->
+<div class="track"
+     data-title="Ne comptez jamais sur ce Beurre (Remix)"
+     data-release="3"
+     data-src="assets/music/mus3.mp3"
+     data-cover="assets/music/img3.png"
+     data-album="album1"
+     data-album-title="Sans Album"
+     onclick="playSingleTrack(this)">
+  <div class="track-thumb-wrapper">
+    <img class="track-thumb" src="assets/music/img3.png" alt="cover">
+    <div class="track-thumb-overlay">▶️</div>
+  </div>
+  <div class="track-info">
+    <span class="track-title">Ne comptez jamais sur ce Beurre (Remix)</span>
+    <span class="track-actions">🔊 330k · ❤️ 40k · 🔁 10k · 💬 52</span>
+  </div>
+</div>
+
+    </div>
+
+   </section>
+</div>
+ </section>
+
+    <!-- MENU DE DROITE -->
+    <aside class="rightbar">
+
+      <!-- STATS -->
+      <div>
+        <div class="stats-row">
+          <span>Abonnés</span>
+          <span>Abonnements</span>
+          <span>Titres</span>
+        </div>
+
+        <div class="stats-values">
+          <span>16k</span>
+          <span>103</span>
+          <span>3</span>
+        </div>
+      </div>
+
+      <!-- A PROPOS -->
+      <div>
+        <div class="right-section-title">À propos :</div>
+        <div class="about-text">
+          Lian Le Pommier 🌳
+        </div>
+      </div>
+
+
+
+      <!-- LIENS -->
+      <div>
+        <div class="right-section-title">Liens :</div>
+        <div class="links">
+          <a href="#">Instagram</a>
+        </div>
+      </div>
+
+
+
+<!-- MENTIONS J'AIME -->
+<div class="right-section-header">
+  <span class="right-section-title">Mentions J'aime :</span>
+  <a class="see-all" href="#">Tout afficher…</a>
+</div>
+
+<div class="list-block">
+
+  <!-- TITRE 1 -->
+  <div class="item"
+       data-title="The Contortionist - Language I : Intuition"
+       data-src="assets/img/contor.mp3"
+       data-cover="assets/img/contor.png"
+       onclick="playSidebarTrack(this)">
+
+    <div class="item-pic" style="background-image:url('assets/img/contor.png')">
+      <div class="item-overlay">▶️</div>
+    </div>
+
+    <div>
+      <div class="item-title">The Contortionist<br><strong>Language I : Intuition</strong></div>
+      <div class="item-stats">
+        <span>🔊 15.3k</span>
+        <span>❤️ 698</span>
+        <span>🔁 12</span>
+        <span>💬 1</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TITRE 2 -->
+  <div class="item"
+       data-title="J. Cole - t h e . c l i m b . b a c k"
+       data-src="assets/img/cole.mp3"
+       data-cover="assets/img/cole.png"
+       onclick="playSidebarTrack(this)">
+
+    <div class="item-pic" style="background-image:url('assets/img/cole.png')">
+      <div class="item-overlay">▶️</div>
+    </div>
+
+    <div>
+      <div class="item-title">J. Cole<br><strong>t h e . c l i m b . b a c k</strong></div>
+      <div class="item-stats">
+        <span>🔊 7,23M</span>
+        <span>❤️ 131k</span>
+        <span>🔁 2.9k</span>
+        <span>💬 1.5k</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TITRE 3 -->
+  <div class="item"
+       data-title="Guns N'Roses - Paradise City"
+       data-src="assets/img/guns.mp3"
+       data-cover="assets/img/guns.png"
+       onclick="playSidebarTrack(this)">
+
+    <div class="item-pic" style="background-image:url('assets/img/guns.png')">
+      <div class="item-overlay">▶️</div>
+    </div>
+
+    <div>
+      <div class="item-title">Guns N'Roses<br><strong>Paradise City</strong></div>
+      <div class="item-stats">
+        <span>🔊 2.1M</span>
+        <span>❤️ 24k</span>
+        <span>🔁 175</span>
+        <span>💬 252</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+<!-- ABONNEMENTS -->
+<div>
+  <div class="right-section-header">
+    <span class="right-section-title">Abonnements :</span>
+    <a class="see-all" href="#">Tout afficher…</a>
+  </div>
+
+  <div class="list-block">
+
+    <a class="item" href="https://soundcloud.com/diontimmer/popular-tracks">
+      <div class="item-pic" style="background-image:url('assets/img/diontimmer.jpg')"></div>
+      <div class="item-title">Dion Timmer</div>
+    </a>
+
+    <a class="item" href="https://soundcloud.com/thecontortionistofficial/popular-tracks">
+      <div class="item-pic" style="background-image:url('assets/img/contortionist.png')"></div>
+      <div class="item-title">The Contortionist</div>
+    </a>
+
+    <a class="item" href="https://soundcloud.com/psyqui/popular-tracks">
+      <div class="item-pic" style="background-image:url('assets/img/PSYQUI.jpg')"></div>
+      <div class="item-title">PSYQUI</div>
+    </a>
+
+  </div>
+</div>
+
+
+
+
+
+
+      <!-- FOOTER -->
+      <div class="footer-links">
+        Informations légales · Confidentialité · Politique d'utilisation des cookies ·
+        Gestionnaire de cookies · À propos · Ressources pour les artistes ·
+        Service presse · Charts · Rapports de transparence
+      </div>
+
+    </aside>
+  </div> <!-- /content-layout -->
+</main>
+
+<footer class="footer">
+  © 2026 E.P.I.P.B — Tous droits réservés<br>
+  À propos · Conditions d’utilisation · Confidentialité · Support
+</footer>
+
+
+<!-- ========================= -->
+<!--     LECTEUR GLOBAL        -->
+<!-- ========================= -->
+
+<div class="global-player" id="globalPlayer" style="display:none;">
+
+  <div class="global-player-row">
+
+    <!-- GAUCHE : cover + titre -->
+    <div class="global-left">
+      <img id="globalPlayerThumb" class="global-player-thumb" src="" alt="cover">
+      <div class="global-player-title" id="globalPlayerTitle"></div>
+    </div>
+
+    <!-- CENTRE : play / pause / next / prev -->
+    <div class="global-center">
+      <button onclick="prevTrack()">⏮️</button>
+      <button onclick="togglePlay()" id="playPauseBtn">⏸️</button>
+      <button onclick="nextTrack()">⏭️</button>
+    </div>
+
+    <!-- DROITE : volume / playlist / favori -->
+    <div class="global-right">
+      <button id="lyricsBtn" onclick="toggleLyrics()">📝 Lyrics</button>
+      <button id="volumeIcon" onclick="toggleMute()">🔊</button>
+      <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1">
+      <button onclick="addToPlaylist()">➕</button>
+      <button onclick="toggleFavorite()" id="favBtn">♡</button>
+    </div>
+
+    <div id="lyricsPanel" class="lyrics-panel">
+      <div class="lyrics-resize-handle"></div> 
+      <div class="lyrics-header">
+        <span>Lyrics</span>
+        <button onclick="toggleLyrics()">✖</button>
+      </div>
+      <div id="lyricsContent" class="lyrics-content">
+        <!-- Les paroles seront affichées ici -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ⭐ LIGNE SPOTIFY : temps gauche + barre + temps droite -->
+  <div class="global-player-row spotify-row">
+
+    <!-- Temps actuel -->
+    <span id="currentTime" class="time-left">0:00</span>
+
+    <!-- Barre de progression -->
+    <div class="global-progress" onclick="seekGlobalAudio(event)">
+      <div class="global-progress-fill" id="globalProgressFill"></div>
+    </div>
+
+    <!-- Temps total -->
+    <span id="totalTime" class="time-right">0:00</span>
+
+  </div>
+
+  <audio id="globalAudio"></audio>
+</div>
+
+
+
+<!-- ========================= -->
+<!--           SCRIPT          -->
+<!-- ========================= -->
+
+<script>
+// =========================
+// VARIABLES GLOBALES
+// =========================
+const globalAudio = document.getElementById("globalAudio");
+const playPauseBtn = document.getElementById("playPauseBtn");
+const volumeSlider = document.getElementById("volumeSlider");
+const volumeIcon = document.getElementById("volumeIcon");
+const favBtn = document.getElementById("favBtn");
+const progressFill = document.getElementById("globalProgressFill");
+
+let playlist = [];
+let currentIndex = 0;
+let isFavorite = false;
+
+// ============================
+// VOLUME PAR DÉFAUT + MÉMOIRE
+// ============================
+
+// Charger volume mémorisé (sinon 0.5)
+let savedVolume = localStorage.getItem("globalVolume");
+savedVolume = savedVolume ? parseFloat(savedVolume) : 0.5;
+
+// Appliquer au lecteur
+globalAudio.volume = savedVolume;
+
+// Synchroniser le slider
+volumeSlider.value = savedVolume;
+
+// ============================
+// ICÔNE VOLUME DYNAMIQUE
+// ============================
+
+function updateVolumeIcon(v) {
+  if (v == 0) {
+    volumeIcon.textContent = "🔇";
+  } else if (v < 0.33) {
+    volumeIcon.textContent = "🔈";
+  } else if (v < 0.66) {
+    volumeIcon.textContent = "🔉";
+  } else {
+    volumeIcon.textContent = "🔊";
+  }
+}
+
+// Mute / Unmute
+function toggleMute() {
+  if (globalAudio.volume > 0) {
+    localStorage.setItem("lastVolume", globalAudio.volume);
+    globalAudio.volume = 0;
+    volumeSlider.value = 0;
+    updateVolumeIcon(0);
+  } else {
+    const last = localStorage.getItem("lastVolume") || 0.5;
+    globalAudio.volume = last;
+    volumeSlider.value = last;
+    updateVolumeIcon(last);
+  }
+}
+
+// Quand l’utilisateur change le volume
+volumeSlider.addEventListener("input", () => {
+  const v = parseFloat(volumeSlider.value);
+  globalAudio.volume = v;
+  localStorage.setItem("globalVolume", v);
+  updateVolumeIcon(v);
+});
+
+// Fonction à appeler à chaque nouvelle musique
+function applySavedVolume() {
+  let v = localStorage.getItem("globalVolume");
+  v = v ? parseFloat(v) : 0.5;
+  globalAudio.volume = v;
+  volumeSlider.value = v;
+  updateVolumeIcon(v);
+}
+
+// ============================
+// LECTURE D’UN TITRE (playlist auto)
+// ============================
+
+function playSingleTrack(trackElement) {
+  const albumId = trackElement.dataset.album;
+
+  // Récupérer tous les titres du même album
+  const tracks = document.querySelectorAll(`.track[data-album="${albumId}"]`);
+
+  playlist = [];
+  tracks.forEach(t => {
+    playlist.push({
+      title: t.dataset.title,
+      src: t.dataset.src,
+      cover: t.dataset.cover
+    });
+  });
+
+  // Trouver l'index du titre cliqué
+  currentIndex = Array.from(tracks).indexOf(trackElement);
+
+  // Lancer la musique
+  const track = playlist[currentIndex];
+  playInGlobalPlayer(track.title, track.src, track.cover);
+
+  globalAudio.onended = nextTrack;
+}
+function playSidebarTrack(itemElement) {
+  const title = itemElement.dataset.title;
+  const src   = itemElement.dataset.src;
+  const cover = itemElement.dataset.cover;
+
+  // On peut faire une "playlist" d'un seul titre
+  playlist = [{
+    title: title,
+    src: src,
+    cover: cover
+  }];
+  currentIndex = 0;
+
+  playInGlobalPlayer(title, src, cover);
+  globalAudio.onended = null; // ou nextTrack si tu veux enchaîner plus tard
+}
+// =========================
+// LECTEUR GLOBAL
+// =========================
+function playInGlobalPlayer(title, src, cover) {
+  const bar = document.getElementById("globalPlayer");
+  const titleBox = document.getElementById("globalPlayerTitle");
+  const thumb = document.getElementById("globalPlayerThumb");
+
+  titleBox.textContent = title;
+  updateLyrics(title);
+  thumb.src = cover;
+
+  globalAudio.src = src;
+  globalAudio.load();
+
+  applySavedVolume();
+
+  globalAudio.play();
+  playPauseBtn.textContent = "⏸️";
+  bar.style.display = "flex";
+}
+
+function togglePlay() {
+  if (globalAudio.paused) {
+    globalAudio.play();
+    playPauseBtn.textContent = "⏸️";
+  } else {
+    globalAudio.pause();
+    playPauseBtn.textContent = "▶️";
+  }
+}
+
+function nextTrack() {
+  if (!playlist.length) return;
+  currentIndex++;
+  if (currentIndex >= playlist.length) currentIndex = 0;
+
+  const track = playlist[currentIndex];
+  playInGlobalPlayer(track.title, track.src, track.cover);
+}
+
+function prevTrack() {
+  if (!playlist.length) return;
+  currentIndex--;
+  if (currentIndex < 0) currentIndex = playlist.length - 1;
+
+  const track = playlist[currentIndex];
+  playInGlobalPlayer(track.title, track.src, track.cover);
+}
+
+// =========================
+// PROGRESSION + SEEK
+// =========================
+globalAudio.ontimeupdate = () => {
+  if (!globalAudio.duration) return;
+  const percent = (globalAudio.currentTime / globalAudio.duration) * 100;
+  progressFill.style.width = percent + "%";
+};
+
+function seekGlobalAudio(event) {
+  const bar = event.currentTarget;
+  const rect = bar.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const percent = x / rect.width;
+  globalAudio.currentTime = percent * globalAudio.duration;
+}
+
+// =========================
+// FAVORI (POP ANIMATION)
+// =========================
+function toggleFavorite() {
+  favBtn.classList.toggle("fav-active");
+
+  favBtn.classList.remove("fav-pop");
+  void favBtn.offsetWidth;
+  favBtn.classList.add("fav-pop");
+}
+
+// =========================
+// AJOUT À LA PLAYLIST
+// =========================
+function addToPlaylist() {
+  const title = document.getElementById("globalPlayerTitle").textContent;
+  alert(`Ajouté à la playlist : ${title}`);
+}
+
+// =========================
+// DÉPLIANT ALBUM
+// =========================
+function toggleAlbum(id) {
+  const box = document.getElementById(id);
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+// =========================
+// LIRE TOUT L’ALBUM
+// =========================
+function playAll(id) {
+  const tracks = document.querySelectorAll(`#${id} .track`);
+  playlist = [];
+
+  tracks.forEach(t => {
+    playlist.push({
+      title: t.dataset.title,
+      src: t.dataset.src,
+      cover: t.dataset.cover
+    });
+  });
+
+  currentIndex = 0;
+  const first = playlist[0];
+  playInGlobalPlayer(first.title, first.src, first.cover);
+
+  globalAudio.onended = nextTrack;
+}
+
+
+// =========================
+// LYRICS PANEL
+// =========================
+
+function toggleLyrics() {
+  const panel = document.getElementById("lyricsPanel");
+  panel.style.display = panel.style.display === "flex" ? "none" : "flex";
+}
+
+// Mettre à jour les lyrics quand une musique démarre
+
+function updateLyrics(title) {
+  const lyricsBox = document.getElementById("lyricsContent");
+
+
+  // Tu rempliras ici tes paroles selon le titre
+
+
+  const lyricsDatabase = {
+    "Petit Beurre sur ma langue V3": `
+[Intro - talking]
+  `,
+
+
+
+  "Beurre Doré (VIP)": `
+Petit Beurre doré
+Petit Beurre doré
+Petit Beurre doré
+Petit Beurre doré
+Petit Beurre doré
+
+Petit Beurre doré
+Petit Beurre doré
+Petit Beurre doré
+Petit Beurre doré
+Petit Beurre doré
+Petit Beurre doré
+
+Petit Beurre doré
+Petit Beurre doré
+Petit Beurre doré Petit Beurre doré
+Petit Beurre doré Petit Beurre doré
+Petit Beurre doré Petit Beurre doré
+Petit Beurre doré
+Petit Beurre doré
+Petit Beurre doré Petit Beurre doré
+Petit Beurre doré Petit Beurre doré
+Petit Beurre doré Petit Beurre doré
+
+J’en veux toujours davantage, j’en veux toujours davantage
+J’ai changé de trajectoire, sans finir dans les engrenages
+J’avais le poing sur un paquet, mais je refusais ce rôle
+Face au miroir, impossible d’accepter ce rôle
+
+J’attrape les miettes, jamais besoin de dépouiller des hommes
+Je serre le sachet seulement quand la menace résonne
+Si j’avais croqué à l’époque, j’aurais pu m’effondrer
+Je sais qu’un gars peut tout gâcher
+
+J’ai roulé dans ma ville l’autre jour, juste pour voir
+Et j’me demande ce qu’il serait resté si j’avais pris un autre couloir
+Je remonte dans la caisse, les souvenirs reviennent de l'armoir
+Jamais j’aurais cru que ma vie tournerait ainsi, avec tout ce que j’peux avoir
+
+Je parle pas de luxe, je parle de ce que j’ai dans les veines
+Ces lignes que j'avale, ces tempêtes que j’entraîne
+J’ai traversé le pire, mais j’ai fini debout
+Comme un début et une fin qui m’ont guidé malgré tout
+Au lieu de m’étendre au soleil, je retourne vers les rues,
+J’étais distrait, je priais pour une pièce perdue
+
+Pas besoin d’prouver que j’vois chaque détail,
+Mon frère, on avance, on franchira les rails
+Beaucoup veulent juste survivre au lever du jour
+Puis blessent les leurs, alors qu’un autre chemin reste toujours
+
+Assez de ce beurre et des toxines dans nos rues
+Ce morceau devient un refuge pour ceux qui n’en peuvent plus
+Ils appellent ça un piège, normal, tout le monde y reste coincé
+On donne nos forces, jamais assez rien ne nous revient en entier
+
+Un jeune ne peut même pas s'accrocher
+Il quitte l’école et finit par manier l’acier
+Jamais assez eu de clarté
+juste des ombres du quartier
+
+Mais ce vieux carré, aujourd’hui, on veut le briser
+J’aperçois la ligne d’arrivée,
+ma vision devient limpide
+Ne minimise pas mes rêves, même si la digestion est rapide
+Beaucoup dans le bloc font du bien, j’le vois chaque matin
+Mais les estomacs préfèrent montrer les délits et les destins malsains
+
+(Petit Beurre doré)
+Assez de ces mensonges ce repas est pour les miens
+(Petit Beurre doré)
+Ceux qui luttent qui retiennent tout sans jamais être vus, (pourtant ils tiennent)
+Crois-moi je comprends
+(Petit Beurre doré)
+J’ai traversé ce vent
+(Petit Beurre doré)
+  `,
+
+
+
+  "Ne comptez jamais sur ce Beurre (Remix)": `
+Il y a un goût sur ma langue
+Qui remet en question tout ce que j'ai senti
+(Tout ce que j'ai senti)
+Je me sens un peu bizarre ces derniers temps
+Je crois que je me suis complètement perdue
+(Complètement)
+Ne comptez jamais sur ce Beurre
+
+♪
+Ne comptez jamais sur ce Beurre
+♪
+Ne comptez jamais sur ce Beurre
+♪
+Ne comptez jamais sur ce Beurre
+♪
+Ne comptez jamais sur ce Beurre
+
+Il y a un goût sur ma langue
+Qui remet en question tout ce que j'ai senti
+(Tout ce que j'ai senti)
+Je me sens un peu bizarre ces derniers temps
+Je crois que je me suis complètement perdue
+(Complètement)
+Ne comptez jamais sur ce Beurre
+
+♪
+Ne comptez jamais sur ce Beurre
+♪
+Ne comptez jamais sur ce Beurre
+♪
+Ne comptez jamais sur ce Beurre
+♪
+Ne comptez jamais sur ce Beurre
+♪
+Ne comptez jamais sur ce Beurre
+  `,
+
+
+  "The Contortionist - Language I : Intuition": `
+Begin hyper-communication
+Restore our vision
+Of natural progression
+Rise in groves to reclaim the source
+The center
+We will be the salvation the Mother seeks
+Traversing in all directions
+Reaching
+Expanding
+Balance finds it's place
+Reaching for the Mother Sun
+Rooted to intuition
+You are the language
+Ever-flowing
+Ever-echoing
+
+♪
+
+Drift with the ebb and flow
+Drift with the ebb and flow
+Ebb and flow
+Ebb and flow
+Ebb and flow
+Ebb and flow
+Intuition sets in
+Branching out from your seed to seek
+
+♪
+
+Contrived sense of inception
+Intuition speak to me
+  `,
+
+
+  "J. Cole - t h e . c l i m b . b a c k": `
+Are you doin' this work to facilitate growth or to become famous?
+Which is more important?
+Getting or letting go?
+You can do anything, anything you can do (You can do anything)
+You can do anything, anything you can do (You can do anything)
+
+
+Everything come back around full circle
+Why do lies sound pleasant but the truth hurtful?
+Everybody gotta cry once in a while
+But how long will it take 'fore you smile?
+This is that come back to life shit
+My niggas pick me up and we gon' light the city up
+As if the sun had the night shift
+And paint the town red
+For my nigga found dead too soon (Bitch, I'm back out-)
+
+
+Yeah
+To the left of that decimal, I need seven figures to play the joint
+Turn up your decibels, peep how I decimate a joint
+Check out my projects like them workers that Section 8 appoints
+And you'll see how I flipped, like exclamation points
+My niggas shoot first as if they never played the point, more two guards
+Enough straps to fill four U-Hauls
+More death than World War II caused
+Around these parts, we pour the brown just to drown these thoughts
+Of black corpses in county morgues, Lord, those images hauntin'
+I ain't been asleep yet, it's ten in the mornin'
+I'm sendin' a warnin', a problem with me is like the BET Hip-Hop Awards
+I'm startin' to see you niggas don't want it
+I'm sick of this flauntin', from niggas I know for sho' ain't got mo' dough than Cole
+Trash rappers, ass backwards, tryna go toe to toe
+We laugh at ya, staff strapped up on top the totem pole, to blast at ya
+Bass masters, look how they tote a pole
+Gotta know the ropes and the protocol
+Or they gon' for sho blow your clothes half off like a promo code
+Made a lil' tune called "Foldin Clothes", and a nigga still ain't known to fold under pressure
+Well, you know what Cole do, make a diamond, they just rhymin'
+Me, I'm quotin' gold
+One phone call get you canceled like a homophobe
+In this PC culture, address me as the G.O.A.T.
+Like they call Chief Keef Sosa, in my sectional like a fuckin' three piece sofa
+I'm known as the chosen one
+Another dead body lay frozen, that's how it go sometimes
+When niggas weighin' coke and not the pros and cons
+Well, I ain't with that sleepin' underground like a gopher, so I go for mines
+
+
+Everything come back around full circle
+Why do lies sound pleasant but the truth hurtful (Yeah)
+Everybody gotta cry once in a while
+But how long will it take 'fore you smile?
+This is that come back to life shit
+My niggas pick me up and we gon' light the city up
+As if the sun had the night shift
+And paint the town red for my nigga found dead too soon
+Now I know why they call it blue moon (Yeah)
+
+
+Survival at all costs, everyday niggas get logged off
+Bodies get hauled off
+Passin' a funeral procession while holdin' my breath in the car, I thought
+At times, it be feelin' the devil be winnin' but do that mean God lost?
+Just got off the phone with my nigga, he back in the kennel, my dog lost
+I brought him 'round close to me before but he
+Became addicted to clout and all the hoes we'd meet
+I slowly peeped jealousy on his breath, whenever he spoke to me
+Like on the low, he feelin' like in my shoes is where he supposed to be
+I tried to ignore the signs, but there in the back of my mind, it felt
+Like lettin' a nigga come sleep on your couch and he eatin' up all yo' groceries
+My nigga repeated this quote to me, I felt its potency
+Said, "Most of these niggas gon' hang themselves, just give 'em the rope and see"
+Shit, I heeded that, and what got showed to me
+Was screamin' that, some niggas you gotta leave 'em back
+Unfortunately we seen the trap
+Niggas be on that demon clock resultantly
+They fiend to clap as often as the Genius app misquotin' me, uh
+Meanwhile, I see that yo' diamonds is glistenin'
+I'm glad that you shinin' but need I remind you my niggas is dimin' and nickelin'?
+Scrapin' up whatever coin they can find, the pettiest crime they committin' it
+Just to get by for a limited time, the steepest of mountains they tryna climb
+I'm here tryna find the derivative
+You niggas don't feel me, you see the clout
+You don't see the real me
+If I was sick, you niggas wouldn't heal me
+That's why I'm healin' myself, gettin' in tune with my God
+Slowly revealin' myself, buildin' my wealth
+A nigga touch mine, I'ma kill 'em myself, trust me
+
+
+Everything come back around full circle
+Why do lies sound pleasant but the truth hurtful?
+Everybody gotta cry once in a while
+But how long will it take 'fore you smile?
+This is that come back to life shit
+My niggas pick me up and we gon' light the city up
+As if the sun had the night shift
+And paint the town red for my nigga found dead too soon
+Now I know why they call it blue moon (Yeah)
+
+
+Bitch, I'm back outside, nigga
+I'm back outside
+I'm back outside
+Bitch, I'm back outside
+
+
+Everybody mentions suicide prevention
+Man, they even made a hotline
+To call up when there's tension
+But I got a question
+What about a fuckin' homicide?
+Need a number for my niggas to call
+Whenever there's a urge to get triggers involved
+Need a number for my niggas to call
+Whenever there's a urge to get triggers involved
+  `,
+
+
+  "Guns N'Roses - Paradise City": `
+Take me down to the Paradise City
+Where the grass is green and the girls are pretty
+I want you, please, take me home (Take me home)
+Take me down to the Paradise City
+Where the grass is green and the girls are pretty
+I want you, please, take me home (Take me home)
+
+♪
+
+Just an urchin living under the street
+I'm a hard case that's tough to beat
+I'm your charity case, so buy me somethin' to eat
+I'll pay you at another time
+Take it to the end of the line
+
+♪
+
+Rags and riches, or so they say, you gotta
+Keep pushing for the fortune and fame
+You know it's, it's all a gamble when it's just a game
+You treat it like a capital crime
+Everybody's doing their time
+
+Take me down to the Paradise City
+Where the grass is green and the girls are pretty
+Oh, won't you please take me home? Yeah-yeah
+Take me down to the Paradise City
+Where the grass is green and the girls are pretty
+Take me home
+
+♪
+
+Strapped in the chair of the city's gas chamber
+Why I'm here, I can't quite remember
+The surgeon general says it's hazardous to breathe
+I'd have another cigarette, but I can't see
+Tell me, who you're gonna believe?
+
+Take me down to the Paradise City
+Where the grass is green and the girls are pretty
+Take me home, yeah-yeah
+Take me down to the Paradise City
+Where the grass is green and the girls are pretty
+Oh, won't you please take me home? Yeah
+
+♪
+
+So far away
+So far away
+So far away
+So far away
+
+Captain America's been torn apart now
+He's a court jester with a broken heart
+He said, "Turn me around and take me back to the start"
+I must be losin' my mind, "Are you blind?"
+"I've seen it all a million times"
+
+Take me down to the Paradise City
+Where the grass is green and the girls are pretty
+Take me home, yeah-yeah
+Take me down to the Paradise City
+Where the grass is green and the girls are pretty
+Oh, won't you please take me home?
+Take me down to the Paradise City
+Where the grass is green and the girls are pretty
+Take me home, yeah-yeah
+Take me down to the Paradise City
+Where the grass is green and the girls are pretty
+Oh, won't you please take me home?
+Home
+
+♪
+
+I wanna go, I wanna know
+I want you, please, take me home
+I wanna see how good it can be
+I want you, please, take me home
+
+Take me down to the Paradise City
+Where the grass is green and the girls are pretty
+Take me home (I want you, please, take me home)
+Take me down to the Paradise City
+Where the grass is green and the girls are pretty
+Oh, won't you please take me home?
+Take me down, ooh yeah, spin me 'round
+Oh, won't you please take me home?
+I wanna see how good it can be
+I want you, please, take me home
+
+♪
+
+I wanna see how good it can be
+Oh, oh, take me home
+Take me down to the Paradise City
+Where the grass is green and the girls are pretty
+I want you, please, take me home (I want you, I want you, take me home)
+I wanna go (I wanna), I wanna know (I wanna)
+I want you, please, take me home, yeah
+Baby, yeah
+  `
+  };
+
+  lyricsBox.textContent = lyricsDatabase[title] || "Aucune lyrics disponible pour ce titre.";
+}
+
+
+// =========================
+// INJECTION DES STATS SIMULÉES
+// =========================
+
+// Base de données des stats réalistes
+const trackStats = {
+  "Petit Beurre sur ma langue V3": {
+  plays: "620k",
+  likes: "12.4k",
+  reposts: "3.2k",
+  comments: "210"
+  },
+  "Beurre Doré (VIP)": {
+  plays: "1.84M",
+  likes: "28.6k",
+  reposts: "4.1k",
+  comments: "657"
+  },
+  "Ne comptez jamais sur ce Beurre (Remix)": {
+  plays: "910k",
+  likes: "17.9k",
+  reposts: "4.0k",
+  comments: "330"
+  }
+};
+
+// Injection automatique dans le HTML
+function applyTrackStats() {
+  document.querySelectorAll(".track").forEach(track => {
+    const title = track.dataset.title;
+    const stats = trackStats[title];
+
+    if (stats) {
+      const actions = track.querySelector(".track-actions");
+      actions.textContent =
+        `🔊 ${stats.plays} · ❤️ ${stats.likes} · 🔁 ${stats.reposts} · 💬 ${stats.comments}`;
+    }
+  });
+}
+
+// Appliquer après génération
+applyTrackStats();
+
+
+// =========================
+// RESIZE HANDLE (haut-gauche)
+// =========================
+
+(function() {
+  const panel = document.getElementById("lyricsPanel");
+  const handle = document.querySelector(".lyrics-resize-handle");
+
+  if (!panel || !handle) return;
+
+  let isResizing = false;
+  let startX, startY, startWidth, startHeight;
+
+  handle.addEventListener("mousedown", (e) => {
+    isResizing = true;
+
+    startX = e.clientX;
+    startY = e.clientY;
+
+    startWidth = panel.offsetWidth;
+    startHeight = panel.offsetHeight;
+
+    document.body.style.userSelect = "none";
+  });
+
+  window.addEventListener("mousemove", (e) => {
+    if (!isResizing) return;
+
+    const dx = startX - e.clientX;
+    const dy = startY - e.clientY;
+
+    // Largeur : tirer vers la gauche → agrandit
+    panel.style.width = `${startWidth + dx}px`;
+
+    // Hauteur : tirer vers le haut → agrandit
+    panel.style.height = `${startHeight + dy}px`;
+  });
+
+  window.addEventListener("mouseup", () => {
+    isResizing = false;
+    document.body.style.userSelect = "";
+  });
+})();
+// =========================
+// MINUTEUR GLOBAL (Spotify style)
+// =========================
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${m}:${s < 10 ? "0" + s : s}`;
+}
+
+globalAudio.addEventListener("timeupdate", () => {
+  document.getElementById("currentTime").textContent =
+    formatTime(globalAudio.currentTime);
+});
+
+globalAudio.addEventListener("loadedmetadata", () => {
+  document.getElementById("totalTime").textContent =
+    formatTime(globalAudio.duration);
+});
+// =========================
+// GÉNÉRER ONGLET "TITRES" + TRI
+// =========================
+
+let allTracksData = []; // stockage interne
+
+function generateTracksTab() {
+  const allTracks = document.querySelectorAll(".track");
+  const tracksList = document.getElementById("tracksList");
+
+  allTracksData = []; // reset
+
+  allTracks.forEach(track => {
+allTracksData.push({
+  title: track.dataset.title,
+  plays: extractPlays(track),
+  recentOrder: parseInt(track.dataset.release) || 0,
+  element: track.cloneNode(true)
+});
+  });
+
+  renderTracks("az");
+}
+
+// Extraire le nombre de lectures depuis "🔊 12k · ❤️ 540 · 🔁 1.1k · 💬 457"
+function extractPlays(track) {
+  const actions = track.querySelector(".track-actions").textContent;
+
+  // Capture : nombre + suffixe (k ou M)
+  const match = actions.match(/🔊\s*([\d\.]+)\s*(k|M)?/i);
+  if (!match) return 0;
+
+  let num = parseFloat(match[1]);
+  const suffix = match[2];
+
+  if (suffix === "k" || suffix === "K") num *= 1000;
+  if (suffix === "M" || suffix === "m") num *= 1000000;
+
+  return num;
+}
+
+
+// Déterminer l'ordre des albums (plus récents en premier)
+function getAlbumOrder(albumId) {
+  const albumOrder = {
+    "album1": 1,
+    "album2": 2,
+    "album3": 3
+  };
+  return albumOrder[albumId] || 999;
+}
+
+// Affichage selon tri
+function renderTracks(mode) {
+  const tracksList = document.getElementById("tracksList");
+  tracksList.innerHTML = "";
+
+  let sorted = [...allTracksData];
+
+  if (mode === "az") {
+    sorted.sort((a, b) => a.title.localeCompare(b.title));
+  }
+  else if (mode === "za") {
+    sorted.sort((a, b) => b.title.localeCompare(a.title));
+  }
+  else if (mode === "plays") {
+    sorted.sort((a, b) => b.plays - a.plays);
+  }
+  else if (mode === "recent") {
+    sorted.sort((a, b) => b.recentOrder - a.recentOrder);
+  }
+
+  sorted.forEach(t => {
+    const clone = t.element;
+    clone.onclick = () => playSingleTrack(clone);
+    tracksList.appendChild(clone);
+  });
+}
+
+// Listener du menu de tri
+document.addEventListener("change", (e) => {
+  if (e.target.id === "tracksSortSelect") {
+    renderTracks(e.target.value);
+  }
+});
+
+// Générer au chargement
+generateTracksTab();
+
+
+// =========================
+// ONGLET FLUIDES (SoundCloud style)
+// =========================
+
+const tabs = document.querySelectorAll(".profile-tab");
+const contents = document.querySelectorAll(".tab-content");
+
+tabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+
+    // Retirer l'état actif
+    tabs.forEach(t => t.classList.remove("active"));
+    contents.forEach(c => c.classList.remove("active"));
+
+    // Activer l'onglet cliqué
+    tab.classList.add("active");
+
+    // Afficher le contenu correspondant
+    const id = tab.getAttribute("data-tab");
+    document.getElementById("tab-" + id).classList.add("active");
+  });
+});
+// =========================
+// BOUTON PARTAGER
+// =========================
+
+document.getElementById("shareBtn").addEventListener("click", () => {
+
+  // 🔗 Ton lien personnalisé
+  const link = "https://degrelion.com/artist/degrelion";
+
+  navigator.clipboard.writeText(link).then(() => {
+
+    const notif = document.getElementById("shareNotif");
+    notif.classList.add("show");
+
+    setTimeout(() => {
+      notif.classList.remove("show");
+    }, 2000);
+
+  });
+});
+
+</script>
+</body>
+</html>
